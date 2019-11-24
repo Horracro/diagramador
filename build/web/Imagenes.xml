@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<imagenes>
+    <imagen ruta='/Diagramador/pirata.jpg' usuario='horracro'/>
+    <imagen ruta='/Diagramador/ny.jpg' usuario='gonzo0203'/>
+    <imagen ruta='/Diagramador/thumb.jpg' usuario='rperedo'/>
+    <imagen ruta='/Diagramador/star-wars.jpg' usuario='alcantara'/>
+</imagenes>
