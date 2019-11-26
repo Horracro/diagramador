@@ -16,23 +16,17 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author diego
+ * @author Diego Herrera Tirado
+ * Servlet para guardar los diagramas de los clientes, funciona con jquery y ajax:
+ * crea un archivo con base al nombre recibido y coloca el xml del diagrama dentro de este
+ * obviamente dentro de la carpeta del usuario
  */
 public class ServletG extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String ruta = request.getRealPath("/");
+        String ruta = request.getRealPath("/");
         String nameFile = request.getParameter("name");
         String xml = request.getParameter("diagrama");
         HttpSession session = request.getSession();

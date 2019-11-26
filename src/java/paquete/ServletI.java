@@ -5,6 +5,7 @@
  */
 package paquete;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,36 +13,60 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import java.io.File;
+import java.io.FileReader;
 /**
  *
- * @author diego
+ * @author Diego Herrera Tirado
+ * 
+ * //Servlet para Ajax y Jquery de la funcion importar 
+ * Recibo una cadena y busco su existencia dentro de los archivos del usuario
+ * si es asi la devuelvo para efectuar la importación
+ * si no devuelvo un nel perro.
  */
 public class ServletI extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String ruta = request.getRealPath("/");
-        String nameFile = request.getParameter("name");
         HttpSession session = request.getSession();
+        PrintWriter out = response.getWriter();
+        
+        //obtenemos el nombre desde la sesion para que 
         String user = (String)session.getAttribute("username");
         
+        //recibimos el nombre del archivo que vamos a importar
+        String name= request.getParameter("dato");
+        
+        
+        String path = ruta+"\\"+user+"\\"+name+".xml";
+        File directorio = new File(path);
+        
+         if(directorio.exists()){
+             String cadena;
+             FileReader f = new FileReader(directorio);
+           
+             try (BufferedReader b = new BufferedReader(f)) {
+                while((cadena = b.readLine())!=null) {
+                    out.println(cadena);
+                }   }
+    
+
+         out.println("<!DOCTYPE html>");
+         
+         }
+         else{
+             out.println("No existe esa webada");
+         }
+
         
         
         
-        PrintWriter out = response.getWriter();
+        
+        
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
+            
        
         
     }
