@@ -415,7 +415,7 @@
 
             var button7 = document.createElement('button');
             button7.type = 'button';
-            button7.innerText = 'convertir a xml';
+            button7.innerText = 'Guardar';
             b13.appendChild(button7);
             button7.setAttribute("class", "botonson");
             button7.setAttribute("id", "submit");
@@ -435,7 +435,7 @@
                     var XMLS = new XMLSerializer();
                     xmlString = XMLS.serializeToString(xml);
                     var diagramName;
-                    button7.innerText = 'Enviar al servlet';
+                    
                     diagramName = prompt("Escriba el nombre del diagrama");
                     diagramaComponentes.setName(diagramName);
                     $.post('ServletG', {
@@ -470,7 +470,6 @@
 
 
 
-
             var button8 = document.createElement('button');
             button8.type = 'button';
             button8.innerText = 'Importar';
@@ -486,18 +485,29 @@
                         dato: nombrecito
                     }, function (xml) {
                         alert(xml);
-                       xml = xml.replace("<!DOCTYPE html>",'');
-                        console.log(xml);
-                        var xmlDoc = jQuery.parseXML(xml);
+                        xml = xml.replace("<!DOCTYPE html>", '');
+                        var xmlnode = ((new DOMParser()).parseFromString(xml, "text/xml"));
+                        var application = xmlnode.getElementsByTagName("umldiagrams")[0];
+                        if (!application) {
+                            alert("Not found a valid XML string");
+                           
+                           }
+                           var xmlnodes = application.childNodes;
+                           var aux, nodeName;
+                           var i, j;
+                            for (i = 0; i < xmlnodes.length; i++) {
+                                 nodeName = xmlnodes[i].nodeName;
+                                   d1 = eval('new '+xmlnode.nodeName+ '()');
+    
+    }
                         
-                    if (xmlDoc) {
-                        console.log(typeof(xmlDoc)+" "+typeof(xml));
-                        alert(xmlDoc.documentElement.nodeName);
-                                    }
-                       
-                                   diagramComponentes.draw();
+                          
+                            d1.setXML( xmlnode );
+                            d1.initialize( 0, div, mainContext, motionContext, width, height );
+                            d1.draw();
+                            
 
-                      
+
 
 
                     });
