@@ -20,6 +20,10 @@
         <servlet-name>ServletG</servlet-name>
         <servlet-class>paquete.ServletG</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServletI</servlet-name>
+        <servlet-class>paquete.ServletI</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Servlet1</servlet-name>
         <url-pattern>/Servlet1</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>ServletG</servlet-name>
         <url-pattern>/ServletG</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletI</servlet-name>
+        <url-pattern>/ServletI</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

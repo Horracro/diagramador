@@ -33,6 +33,7 @@ public class ServletG extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
          String ruta = request.getRealPath("/");
+        String nameFile = request.getParameter("name");
         String xml = request.getParameter("diagrama");
         HttpSession session = request.getSession();
         String user = (String)session.getAttribute("username");
@@ -47,23 +48,27 @@ public class ServletG extends HttpServlet {
         
         
         directorio.mkdirs();
-        archivo = new File(ruta+"\\"+user+"\\"+"diagramines.xml");
-        if (!archivo.exists()) {
+        archivo = new File(ruta+"\\"+user+"\\"+nameFile+".xml");
+        if (archivo.exists()) {
+            archivo.delete();
+            archivo = new File(ruta+"\\"+user+"\\"+nameFile+".xml");
             archivo.createNewFile();
             escribir = new FileWriter(archivo, true);
             linea = new PrintWriter(escribir);
             linea.println(xml);
             linea.close();
-        } else {
-           
-                escribir = new FileWriter(archivo, true);
-                linea = new PrintWriter(escribir);
-                linea.println(xml);
-                linea.close();
-            }
-
+        }else{
+            archivo.createNewFile();
+            escribir = new FileWriter(archivo, true);
+            linea = new PrintWriter(escribir);
+            linea.println(xml);
+            linea.close();
+            
+            
+        }
+        
             PrintWriter out = response.getWriter();
-                        out.println("El archivo ha llegado correctamente a nombre de: "+ user);
+                        out.println("El archivo ha llegado correctamente a nombre de: "+ user +"con el nombre de: "+nameFile);
           
         }
 

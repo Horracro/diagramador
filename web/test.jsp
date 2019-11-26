@@ -414,13 +414,13 @@ var motionContext = canvas.getContext('2d');
 								app.appendChild( diagramaComponentes.getXML( xml ) );
 								var XMLS = new XMLSerializer();
 								xmlString = XMLS.serializeToString( xml );
-								alert(xmlString);
+								var diagramName; 
                                                                 button7.innerText = 'Enviar al servlet';
 								$('#submit').click(function(event) {	
-
+                                                                    diagramName = prompt("Escriba el nombre del diagrama");
 									$.post('ServletG', {
 										diagrama: xmlString
-										
+										,name: diagramName
 										}, function(responseText) {
 											alert(responseText);
 												});
