@@ -107,7 +107,7 @@
         <script type="text/javascript" >
 
             var div = document.getElementById("nodoPadre");
-            var width = 1280;
+            var width = 1100;
             var height = 720;
             div.setAttribute('class', 'ud_diagram_div');
             div.style.width = width + 'px';
@@ -448,17 +448,6 @@
 
 
 
-                    //xmlString se debe manipular para enviarse y guardarse en el servidor.
-                    /*  if (window.XMLHttpRequest) {
-                     peticion_http = new XMLHttpRequest();
-                     } else if (window.ActiveXObject) {
-                     peticion_http = new ActiveXObject("Microsoft.XMLHTTP");
-                     }
-                     
-                     peticion_http.onreadystatechange = mostrarContenido;
-                     peticion_http.open('POST', './diagramas.xml', true);
-                     peticion_http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                     peticion_http.send(xmlString);*/
                 });
 
 
@@ -481,6 +470,7 @@
 
                 $('#submarino').click(function (event) {
                     var nombrecito = prompt("Ingresa el nombre a buscar");
+                    diagramaComponentes.setName(nombrecito);
                     $.post('ServletI', {
                         dato: nombrecito
                     }, function (xml) {
@@ -491,6 +481,7 @@
                         var xmlnode = jQuery.parseXML(xml);
                         if (xmlnode) {
                             alert(xmlnode.documentElement.nodeName);
+                            
                         }
                         
                         console.log(xmlnode);
@@ -498,20 +489,29 @@
                         if (!application) {
                             alert("Not found a valid XML string");
                         }
-                      
+                      mainContext.clearRect( 0, 0, width, height );
+
+                       motionContext.clearRect( 0, 0, width, height );
                        var xmlnodes = application.childNodes;
                        var aux, nodeName;
                        var i;          
                         for (i = 0; i < xmlnodes.length; i++) {
                             nodeName = xmlnodes[i].nodeName;
-                            aux = eval("new " + nodeName + "()");
-                            aux.setXML(xmlnodes[i]);
-                            aux.initialize( 0, div, mainContext, motionContext, width, height );
-                            aux.draw();
-                            diagramaComponentes=aux;                         
+                            diagramaComponentes = eval("new " + nodeName + "()");
+                            diagramaComponentes.setXML(xmlnodes[i]);
+                            
+                            diagramaComponentes.initialize( 0, div, mainContext, motionContext, width, height );
+                            diagramaComponentes.setName(nombrecito);
+                            diagramaComponentes.draw();
+                            
+                            diagramaComponentes.interaction(true);
+                            
+        
+                                
+                            
                         }         
                       
-                     
+                  
                         
                         
                  
@@ -529,76 +529,26 @@
 
                 });
             });
+            
+            
 
-
-            /* var xml = (new DOMParser()).parseFromString('<umldiagrams/>', 'text/xml');
-             var xmlnode = (new DOMParser()).parseFromString(xml, "text/xml");
-             var d1 = new UMLComponentDiagram({backgroundNodes: "#ff9900"});
-             d1 = eval('new ' + xmlnode.nodeName + '()');
-             d1.setXML(xmlnode, stereotypes);
-             d1.initialize(0, div, mainContext, motionContext, width, height);
-             d1.draw();
-             var xmlnode = (new DOMParser()).parseFromString(xml, "text/xml");
-             alert(xmlnode);
-             profile = eval('new ' + xmlnode.nodeName + '()');
-             profile.setXML(xmlnode, diagrams, acceptedElementsUML);
-             var elements = profile.getElements();
-             for (k = 0; k < elements[0].length; k++){
-             metaclass.push(elements[0][k]);
-             alert(elements[0][k])}
-             
-             for (k = 0; k < elements[1].length; k++){
-             stereotypes.push(elements[1][k]);
-             alert(elements[1][k])}
-             
-             
-             
-             profile.initialize(0, div, mainContext, motionContext, width, height);
-             profile.draw();*/
-
-
-
-
-
-
-
-
-
-            /*  button8.onclick = function(){
-             
-             
-             
-             
-             
-             var xml = (new DOMParser()).parseFromString('<umldiagrams/>', 'text/xml');
-             var xmlnode = (new DOMParser()).parseFromString(xml, "text/xml");
-             var d1 = new UMLComponentDiagram({backgroundNodes: "#ff9900"});
-             d1 = eval('new ' + xmlnode.nodeName + '()');
-             d1.setXML(xmlnode, stereotypes);
-             d1.initialize(0, div, mainContext, motionContext, width, height);
-             d1.draw();
-             var xmlnode = (new DOMParser()).parseFromString(xml, "text/xml");
-             alert(xmlnode);
-             profile = eval('new ' + xmlnode.nodeName + '()');
-             profile.setXML(xmlnode, diagrams, acceptedElementsUML);
-             var elements = profile.getElements();
-             for (k = 0; k < elements[0].length; k++){
-             metaclass.push(elements[0][k]);
-             alert(elements[0][k])}
-             
-             for (k = 0; k < elements[1].length; k++){
-             stereotypes.push(elements[1][k]);
-             alert(elements[1][k])}
-             
-             
-             
-             profile.initialize(0, div, mainContext, motionContext, width, height);
-             profile.draw();
-             }*/
-
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+                    
             var interaccionDosClick = function (g) {
 
                 diagramaComponentes.interaction(false);
+                diagramaComponentes.stopEvents();
                 var b = 0
                         , d = 0;
                 var f = true;
@@ -606,6 +556,7 @@
                     var j = event.pageX - div.offsetLeft;
                     var h = event.pageY - div.offsetTop;
                     if (f) {
+                        diagramaComponentes.stopEvents();
                         f = false;
                         b = j;
                         d = h
@@ -613,30 +564,15 @@
 
                         g(diagramaComponentes, b, d, j, h);
                         div.onclick = false;
-                        diagramaComponentes.draw();
+                       
                         diagramaComponentes.interaction(true)
                     }
-                };
-                div.onclick = a
+                diagramaComponentes.draw(); };
+                div.onclick = a;
             }
             ;
             document.body.appendChild(botones);
-            function mandaDatos(xml) {
-                var string = document.createElement("div");
-                var form = document.createElement("form");
-                var text = document.createTextNode(xml)
-                form.setAttribute("method", "GET");
-                form.setAttribute("action", "Servletht");
-                string.appendChild(text);
-                document.body.appendChild(string);
-                var input = document.createElement("input");
-                input.setAttribute("type", "hidden");
-                input.setAttribute("name", "cadenaxml");
-                input.setAttribute("value", xml);
-//append to form element that you want .
-                form.appendChild(input);
-                document.body.appendChild(form);
-            }
+    
         </script>
 
 
