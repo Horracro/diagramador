@@ -28,14 +28,14 @@
             }
 
             .botoncin{
-                text-decoration: none;
-                padding: 10px;
+    
+               
                 font-weight: 600;
                 font-size: 15px;
                 color: #ffffff;
-                background-color: #1883ba;
-               
-               
+                background-color: #008080;
+
+
             }
             .botoncin:hover{
                 color: #1883ba;
@@ -48,8 +48,8 @@
                 font-size: 20px;
                 color: #ffffff;
                 background-color: #CD2222;
-               
-               
+
+
             }
             .botonson:hover{
                 color: #010101;
@@ -64,7 +64,7 @@
 
 
 
- 
+
 
     <body class="p-3 mb-2 bg-info text-white">
     <nav >
@@ -468,7 +468,7 @@
 
 
 
-
+            
 
             var button8 = document.createElement('button');
             button8.type = 'button';
@@ -487,47 +487,38 @@
                         alert(xml);
                         xml = xml.replace("<!DOCTYPE html>", '');
                         xml = xml.replace(/\n/gi, "");
+                        console.log(xml);
                         var xmlnode = jQuery.parseXML(xml);
-                            if (xmlnode) {
-                                        alert(xmlnode.documentElement.nodeName);
-                                            }
+                        if (xmlnode) {
+                            alert(xmlnode.documentElement.nodeName);
+                        }
+                        
+                        console.log(xmlnode);
                         var application = xmlnode.getElementsByTagName("umldiagrams")[0];
                         if (!application) {
                             alert("Not found a valid XML string");
                         }
-                        console.log(typeof(xmlnode));
-                        diagramaComponentes = new UMLComponentDiagram();
-
-                        diagramaComponentes.setXML(xmlnode.nodeName);
-                            
-                        diagramaComponentes.initialize(0, div, mainContext, motionContext, width, height);
-                        diagramaComponentes.interaction(true);
-                        diagramaComponentes.draw();
-                       
-
-                            console.log("este es div: " + div + " Este es main context: " + mainContext + " Este es motionContext: " + motionContext + " este es width: " + width + " Esto es el nodename: " + xmlnode.nodeName + " esto es el xmlnode: " + xmlnode + "y esto es la cadena: " + xml);
-
-
-                            diagramaComponentes.setXMLString(xml);
-
-
-
-                            try {
-                                diagramaComponentes.setXML(xmlnode);
-                            } catch (error) {
-                                alert(error);
-                            }
-                            diagramaComponentes.initialize(0, div, mainContext, motionContext, width, height);
-                            diagramaComponentes.draw();
-                            
-
-                            /* d1.setXML( xmlnode );
-                             d1.initialize( 0, div, mainContext, motionContext, width, height );
-                             d1.draw();*/
-
-
+                      
+                       var xmlnodes = application.childNodes;
+                       var aux, nodeName;
+                       var i;          
+                        for (i = 0; i < xmlnodes.length; i++) {
+                            nodeName = xmlnodes[i].nodeName;
+                            aux = eval("new " + nodeName + "()");
+                            aux.setXML(xmlnodes[i]);
+                            aux.initialize( 0, div, mainContext, motionContext, width, height );
+                            aux.draw();
+                            diagramaComponentes=aux;                         
+                        }         
+                      
+                     
                         
-                       
+                        
+                 
+
+
+
+
 
 
 
