@@ -34,8 +34,8 @@
                 font-size: 15px;
                 color: #ffffff;
                 background-color: #1883ba;
-                border-radius: 6px;
-                border: 1px solid #0016b0;
+               
+               
             }
             .botoncin:hover{
                 color: #1883ba;
@@ -48,8 +48,8 @@
                 font-size: 20px;
                 color: #ffffff;
                 background-color: #CD2222;
-                border-radius: 6px;
-                border: 2px solid #641D1D;
+               
+               
             }
             .botonson:hover{
                 color: #010101;
@@ -64,7 +64,7 @@
 
 
 
-    <br/>
+ 
 
     <body class="p-3 mb-2 bg-info text-white">
     <nav >
@@ -397,7 +397,7 @@
                 }
 
                 interaccionUnClick(f);
-            }
+            };
 
             var button6 = document.createElement('button');
             button6.type = 'button';
@@ -410,7 +410,7 @@
                 diagramaComponentes.draw();
                 var url = canvas.toDataURL('image/png');
                 window.open(url, 'image/png');
-            }
+            };
 
 
             var button7 = document.createElement('button');
@@ -435,7 +435,7 @@
                     var XMLS = new XMLSerializer();
                     xmlString = XMLS.serializeToString(xml);
                     var diagramName;
-                    
+
                     diagramName = prompt("Escriba el nombre del diagrama");
                     diagramaComponentes.setName(diagramName);
                     $.post('ServletG', {
@@ -486,26 +486,50 @@
                     }, function (xml) {
                         alert(xml);
                         xml = xml.replace("<!DOCTYPE html>", '');
-                        var xmlnode = ((new DOMParser()).parseFromString(xml, "text/xml"));
+                        xml = xml.replace(/\n/gi, "");
+                        var xmlnode = jQuery.parseXML(xml);
+                            if (xmlnode) {
+                                        alert(xmlnode.documentElement.nodeName);
+                                            }
                         var application = xmlnode.getElementsByTagName("umldiagrams")[0];
                         if (!application) {
                             alert("Not found a valid XML string");
-                           
-                           }
-                           var xmlnodes = application.childNodes;
-                           var aux, nodeName;
-                           var i, j;
-                            for (i = 0; i < xmlnodes.length; i++) {
-                                 nodeName = xmlnodes[i].nodeName;
-                                   d1 = eval('new '+xmlnode.nodeName+ '()');
-    
-    }
-                        
-                          
-                            d1.setXML( xmlnode );
-                            d1.initialize( 0, div, mainContext, motionContext, width, height );
-                            d1.draw();
+                        }
+                        console.log(typeof(xmlnode));
+                        diagramaComponentes = new UMLComponentDiagram();
+
+                        diagramaComponentes.setXML(xmlnode.nodeName);
                             
+                        diagramaComponentes.initialize(0, div, mainContext, motionContext, width, height);
+                        diagramaComponentes.interaction(true);
+                        diagramaComponentes.draw();
+                       
+
+                            console.log("este es div: " + div + " Este es main context: " + mainContext + " Este es motionContext: " + motionContext + " este es width: " + width + " Esto es el nodename: " + xmlnode.nodeName + " esto es el xmlnode: " + xmlnode + "y esto es la cadena: " + xml);
+
+
+                            diagramaComponentes.setXMLString(xml);
+
+
+
+                            try {
+                                diagramaComponentes.setXML(xmlnode);
+                            } catch (error) {
+                                alert(error);
+                            }
+                            diagramaComponentes.initialize(0, div, mainContext, motionContext, width, height);
+                            diagramaComponentes.draw();
+                            
+
+                            /* d1.setXML( xmlnode );
+                             d1.initialize( 0, div, mainContext, motionContext, width, height );
+                             d1.draw();*/
+
+
+                        
+                       
+
+
 
 
 
